@@ -1,31 +1,29 @@
 module World where
 
-import Object
+import Object (Object, stepObject, renderObject)
 import Graphics.Gloss
 import Graphics.Gloss.Interface.Pure.Simulate
-import Vector
+import Vector (zeroV)
 
-data World = World [Object]
+type World = [Object]
 
 --render the world to a picture
 render :: World -> Picture
-render (World os) = pictures $ fmap renderObject os
+render os = pictures $ fmap renderObject os
 
 -- advance the state of the world
 step :: ViewPort -> Float -> World -> World
-step _ f (World os) = World (fmap (stepObject f) os)
+step _ f os = fmap (stepObject f os) os
 
 -- world with nothing in it
 emptyWorld :: World
-emptyWorld = World []
+emptyWorld = []
 
 -- world with some stuff in it for testing
 testWorld :: World
 testWorld = emptyWorld
-          +@+ Object zeroV (Vector 10 10)
-          +@+ Object (Vector (-10.0) 0) (Vector (-5) 10)
-          +@+ Object zeroV zeroV
+          +@+ (zeroV, (10, 10))
 
 -- adds object to the world
 (+@+) :: World -> Object -> World
-(World os) +@+ o = World (o:os)
+os +@+ o = o:os

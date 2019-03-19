@@ -9,7 +9,7 @@ main :: IO ()
 main = simulate
        (InWindow "Simulation" (200, 200) (10, 10))
        white
-       1000
+       60
        testWorld
        render
        step

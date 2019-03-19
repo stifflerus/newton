@@ -1,12 +1,24 @@
 module Vector where
 
-data Vector = Vector { x :: Float, y :: Float }
+type Vector = (Float, Float)
+
+x :: Vector -> Float
+x = fst
+
+y :: Vector -> Float
+y = snd
 
 vmap :: (Float -> Float) -> Vector -> Vector
-vmap f (Vector x y) = Vector (f x) (f y)
+vmap f (x, y) = ((f x), (f y))
 
 vzip :: (Float -> Float -> Float) -> Vector -> Vector -> Vector
-vzip f (Vector x1 y1) (Vector x2 y2) = Vector (f x1 x2) (f y1 y2)
+vzip f (x1, y1) (x2, y2) = ((f x1 x2), (f y1 y2))
+
+vnegate :: Vector -> Vector
+vnegate = vmap negate
+
+normalize :: Vector -> Vector
+normalize v = v ^/ (magnitude v)
 
 -- Vector addition
 (^+^) :: Vector -> Vector -> Vector
@@ -28,6 +40,17 @@ v ^* f = vmap (*f) v
 (^/) :: Vector -> Float -> Vector
 v ^/ f = vmap (/f) v
 
+-- magnitude of the Vector
+magnitude :: Vector -> Float
+magnitude v = sqrt ((x v)**2 + (y v)**2)
+
 -- zero vector
 zeroV :: Vector
-zeroV = Vector 0.0 0.0
+zeroV = (0.0, 0.0)
+
+-- distance between two points
+vdistance :: Vector -> Vector -> Float
+vdistance v1 v2 = sqrt (xdiffsquared + ydiffsquared)
+  where diffSquared f = ((f v1) - (f v2))**2
+        xdiffsquared = diffSquared x
+        ydiffsquared = diffSquared y
