@@ -34,7 +34,7 @@ f *^ v = vmap (*f) v
 
 -- Scalar multiplication
 (^*) :: Vector -> Float -> Vector
-v ^* f = vmap (*f) v
+(^*) = flip (*^)
 
 --scalar division
 (^/) :: Vector -> Float -> Vector
