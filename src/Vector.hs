@@ -26,7 +26,7 @@ normalize v = v ^/ (magnitude v)
 
 -- Vector subtraction
 (^-^) :: Vector -> Vector -> Vector
-(^-^) = vzip (+)
+(^-^) = vzip (-)
 
 -- Scalar multiplication
 (*^) :: Float -> Vector -> Vector
