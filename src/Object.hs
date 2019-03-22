@@ -1,7 +1,7 @@
 module Object where
 
 import Vector (Vector, vdistance, zeroV, (*^), (^+^), (^-^), x, y, normalize)
-import Graphics.Gloss (Picture, translate, circle)
+import Graphics.Gloss (Picture, pictures, translate, circle, line, color, white, red)
 
 type Object = (Vector, Vector)
 
@@ -15,7 +15,10 @@ velocity = snd
 
 -- Render the object into a picture
 renderObject :: Object -> Picture
-renderObject (p, _) = translate (x p) (y p) (circle 10)
+renderObject (p, v) = pictures [outline, velocity]
+  where
+    outline  = color white $ translate (x p) (y p) (circle 10)
+    velocity = color red $ (line [p, p ^+^ v])
 
 -- Calculate the new position and speed of the object
 stepObject :: Float -> [Object] -> Object -> Object
