@@ -22,7 +22,9 @@ emptyWorld = []
 -- world with some stuff in it for testing
 testWorld :: World
 testWorld = emptyWorld
-          +@+ (zeroV, (10, 10))
+          +@+ (zeroV, zeroV)
+          +@+ ((10, 10), (10, 10))
+          +@+ ((15, 15), (-15, 0))
 
 -- adds object to the world
 (+@+) :: World -> Object -> World

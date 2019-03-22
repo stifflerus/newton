@@ -1,6 +1,6 @@
 module Object where
 
-import Vector (Vector, vdistance, (*^), (^+^), (^-^), x, y, normalize)
+import Vector (Vector, vdistance, zeroV, (*^), (^+^), (^-^), x, y, normalize)
 import Graphics.Gloss (Picture, translate, circle)
 
 type Object = (Vector, Vector)
@@ -19,14 +19,21 @@ renderObject (p, _) = translate (x p) (y p) (circle 10)
 
 -- Calculate the new position and speed of the object
 stepObject :: Float -> [Object] -> Object -> Object
-stepObject dt os o = (p', v')
+stepObject dt w o = (p', v')
   where p  = position o
-        v  = velocity o
         p' = p ^+^ dp
         dp = dt *^ v
+        v  = velocity o
         v' = v ^+^ dv
         dv = dt *^ a
-        a  = foldr1 (^+^) (fmap (gravity o) os)
+        a  = foldr (^+^) zeroV (fmap (gravity o) (dropA w o))
+
+-- remove item from list
+dropA :: (Eq a) => [a] -> a -> [a]
+dropA [] a = []
+dropA (x:xs) a
+  | x == a    = dropA xs a
+  | otherwise = x:(dropA xs a)
 
 -- distance between two objects
 distance :: Object -> Object -> Float
@@ -41,5 +48,5 @@ gravity o1 o2 = a *^ u
 
 -- magnitude of acceleration between two objects
 acceleration :: Object -> Object -> Float
-acceleration o1 o2 = 1 / dsquared
+acceleration o1 o2 = 1000 / dsquared
   where dsquared = (distance o1 o2)**2
